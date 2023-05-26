@@ -25,6 +25,77 @@
 #         print("we have no goods now. See U later!")
 #     return False
 
+
+def hello(customer):
+
+
+    customer['bag'] = []
+
+    print("\n*************************"
+          f"\nHello, {customer['name']}!\nGlad to see U in 'xeShop'\n"
+          "*************************\n"
+          "\nChoose something for your boyfriend:")
+
+def print_products(store):
+
+    i = 1
+
+    for goods, price in store.items():
+
+        print(f"{i}) {goods.upper()} - {price} $")
+
+        i += 1
+
+    print("-----------------")
+
+def quit (user_choose, customer) :
+    print("Q - Quite")
+
+    if user_choose == "q":
+
+        print(f"Goodbye, {customer['name']}")
+
+        print(f"\nYour By now:\n{customer['bag']}\n")
+
+def sell_product(user_choose, store, customer):
+
+    if user_choose in store:
+
+        for choosen_goods in store.keys():
+
+            if choosen_goods == user_choose and store[choosen_goods] < customer['balance']:
+
+                customer["balance"] -= store[choosen_goods]
+
+                customer['bag'].append({choosen_goods: store[choosen_goods]})
+
+                print(f"\n{choosen_goods.upper()} by {store[choosen_goods]}$ added in your bag\n"
+                      
+                      f"\nYour By now:\n{customer['bag']}\n"
+                      
+                      f"\nYou have {customer['balance']}$\n")
+
+        del store[user_choose]
+
+
+def shopping(customer, store, store_of_dogs):
+
+    user_choose = ""
+
+    while customer['balance'] >= 0 and user_choose != "q" and len(store) > 0:
+
+        print_products(store)
+
+        print_products(store_of_dogs)
+
+        user_choose = input("What do you want?\n").lower()
+
+        quit(user_choose, customer)
+
+        sell_product(user_choose, store, customer)
+
+        sell_product(user_choose, store_of_dogs, customer)
+
 def main():
     customer = {
         "name": "Piter",
@@ -40,50 +111,15 @@ def main():
         "mask": 15
     }
 
-    customer['bag'] = []
+    store_of_dogs = {
+        "blonde": 150,
+        "brunette": 200,
+        "trance": 100,
+    }
 
-    print("\n*************************")
+    hello(customer)
 
-    print(f"Hello, {customer['name']}!\nGlad to see U in 'xeShop'")
-
-    print("*************************\n")
-
-    print("Choose something for your boyfriend:\n")
-
-    while customer['balance'] >= 0:
-        i = 1
-
-        for goods, price in store.items():
-            print(f"{i}) {goods.upper()} - {price} $")
-
-            i += 1
-        print("q) QUIT")
-
-        user_choose = input("What do you want?\n").lower()
-
-        # if user_choose in store:
-
-        for choosen_goods in store.keys():
-
-            if choosen_goods == user_choose:
-
-                customer["balance"] -= store[choosen_goods]
-
-                customer['bag'].append({choosen_goods: store[choosen_goods]})
-
-                print(f"\n{choosen_goods.upper()} by {store[choosen_goods]}$ added in your bag")
-
-                print(f"\nYour Bag:\n{customer['bag']}\n")
-
-                print(f"You have {customer['balance']}$. Do you need something else?")
-
-            elif user_choose == "q":
-
-                print(f"Your boyfriend will be sad((( Goodbye, {customer['name']}")
-
-                return False
-
-        del store[user_choose]
+    shopping(customer, store, store_of_dogs)
 
 if __name__ == "__main__":
     main()
